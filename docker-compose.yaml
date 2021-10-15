@@ -6,8 +6,8 @@ services:
     image: nginx:1.21
     restart: always
     volumes:
-      - ./docker/conf.d/app.conf:/etc/nginx/conf.d/app.conf
-      - .:/var/www
+      - ./docker/conf.d/app-slim.conf:/etc/nginx/conf.d/app.conf
+      - .:/app
     depends_on:
       - "php"
     links:
@@ -21,7 +21,7 @@ services:
     container_name: app-php
     image: php:8.0-fpm-alpine
     volumes:
-      - .:/var/www
+      - .:/app
     ports:
       - "9000"
     networks:

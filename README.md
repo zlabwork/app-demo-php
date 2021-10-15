@@ -10,3 +10,6 @@ docker-compose down
 docker logs app-web -f --tail 5
 docker-compose logs -f --tail 5
 ```
+
+## slim docs
+https://www.slimframework.com/docs/v4/
