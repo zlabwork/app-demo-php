@@ -3,6 +3,7 @@ MAINTAINER J<z@zlab.dev>
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         locales \
+        net-tools \
         mysql-client \
         mysql-server-8.0 \
         nginx \
