@@ -19,6 +19,11 @@ docker run -it --name my-app ubuntu:21.10 bash
 docker exec -it NAME/ID bash
 ```
 
+## tools
+```bash
+apt install net-tools iputils-ping
+```
+
 
 ## slim docs
 https://www.slimframework.com/docs/v4/
