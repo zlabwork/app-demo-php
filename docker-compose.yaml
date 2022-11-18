@@ -13,7 +13,7 @@ services:
     links:
       - php
     ports:
-      - "${APP_PORT}:8080"
+      - "${APP_PORT:-8000}:8080"
     networks:
       - appnet
 
@@ -44,14 +44,38 @@ services:
     restart: always
     volumes:
       - ./schema:/docker-entrypoint-initdb.d
-      #- ./var/my/data:/var/lib/mysql
+      - ./var/db-mysql:/var/lib/mysql
     ports:
       - "3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-app}
+      MYSQL_USER: ${MYSQL_USER:-dev}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
+    networks:
+      - appnet
+
+  postgres:
+    container_name: app-postgres
+    image: postgres:${POSTGRES_VERSION:-15}-alpine
+    ports:
+      - "5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-app}
+      POSTGRES_USER: ${POSTGRES_USER:-dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
+    volumes:
+      - ./schema:/docker-entrypoint-initdb.d
+      - ./var/db-postgres:/var/lib/postgresql/data:rw
+      #- db-data:/var/lib/postgresql/data:rw
+    networks:
+      - appnet
+
+  adminer:
+    container_name: app-adminer
+    image: adminer:4.8.1
+    ports:
+      - "4000:8080"
     networks:
       - appnet
 
@@ -62,3 +86,6 @@ networks:
     ipam:
       config:
         - subnet: 10.0.0.0/16
+
+volumes:
+  db-data:
